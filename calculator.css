@@ -1,0 +1,132 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f5f7f9;
+    font-family: 'Arial', sans-serif;
+}
+.name{
+    font-size: .5rem;
+    font-weight: 900;
+    margin-left: 190px;
+    cursor:pointer;
+    display: inline;
+    color: white;
+}
+.container.active .name{ 
+    color: black;
+}
+.container {
+    width: 280px; 
+    height: 450px;
+    padding: 20px;
+    border-radius: 20px;
+    background-color: #2b2b2b; 
+    box-shadow: 3px 5px 10px rgba(0, 0, 0, 0.9);
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+.container.active{
+    background-color: #ecf0f3;
+    box-shadow: 3px 5px 10px rgba(0, 0, 0, 0.504); 
+}
+/* Display section styling */
+.display-section {
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+}
+
+#inputscreen {
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    height: 50px;
+    width: 95%; 
+    font-weight: bold;
+    text-align: right;
+    padding-right: 15px;
+    font-size: 20px;
+    background-color: #3a3a3a;
+    color: #ffffff;
+    box-shadow: inset 5px 5px 10px rgba(0, 0, 0, 0.5),
+                inset -5px -5px 12px rgba(255, 255, 255, 0.1) 
+}
+.container.active #inputscreen {
+    color: #333;
+    background-color: #e0e5ec;
+    box-shadow: inset -5px -5px 10px #ffffff,
+                inset 5px 5px 12px rgba(35, 27, 27, 0.1);
+}
+
+/* Input section styling */
+.input-section {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.input-section button {
+    height: 50px;  
+    width: 50px;
+    border-radius: 50%;
+    border: none;
+    outline: none;
+    font-size: 18px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    background-color: #3a3a3a;
+    color: #ffffff;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5),
+                -5px -5px 15px rgba(255, 255, 255, 0.1);
+}
+.container.active .input-section button {     
+    background-color: #ecf0f3;
+    color: #333;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1),
+                -5px -5px 15px rgba(255, 255, 255, 1);
+}
+.container.active .input-section button:hover {
+    box-shadow: inset 5px 5px 12px rgba(0, 0, 0, 0.2),
+                inset -5px -5px 12px rgba(255, 255, 255, 0.5);
+    background-color: #f0f0f0;
+}
+.input-section button:hover {
+    box-shadow: inset -5px -5px 12px rgba(0, 0, 0, 0.2),
+                inset 5px 5px 12px rgba(2, 2, 2, 0.568);
+   
+}
+/* Equal button styling */
+.container.active #display {
+    background-color: #ff4b4b;
+    color: white;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2),
+                -5px -5px 15px rgba(255, 255, 255, 0.5);
+}
+
+.container.active #display:hover {
+    background-color: #ff3a3a;
+    box-shadow: inset 5px 5px 12px rgba(0, 0, 0, 0.2),
+                inset -5px -5px 12px rgba(255, 255, 255, 0.3);
+}
+
+#display {
+    background-color: #ff3333;
+    color: white;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.8),
+                -5px -5px 15px rgba(255, 255, 255, 0.1);
+}
+ #display:hover {
+    background-color: #ff1a1a;
+    box-shadow: inset 5px 5px 12px rgba(0, 0, 0, 0.4),
+                inset -5px -5px 12px rgba(255, 255, 255, 0.1);
+}
