@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="calculator.css">
 </head>
 <body>
@@ -12,61 +13,218 @@
         <div class="display-section">
             <input type="text" id="inputscreen" readonly>
         </div>
+        <div class="form-check form-switch">
+            <input onclick="scientific()" class="form-check-input custom-switch" type="checkbox" id="flexSwitchCheckDefault">
+        </div>        
         <div class="input-section">
             <button onclick="clearData()" class="clear">C</button>
             <button class="del" onclick="deleteLast()">DEL</button>
             <button value="%" onclick="appendData(this)" class="num">%</button>
             <button value="/" onclick="appendData(this)" class="num">/</button>
+            <button value="(" onclick="appendData(this)" class="num snum">(</button>
+            <button value=")" onclick="appendData(this)" class="num snum">)</button>
+
             <button value="7" onclick="appendData(this)" class="num">7</button>
             <button value="8" onclick="appendData(this)" class="num">8</button>
             <button value="9" onclick="appendData(this)" class="num">9</button>
             <button value="*" onclick="appendData(this)" class="num">*</button>
+            <button value="^" onclick="appendData(this)" class="num snum">^</button>
+            <button value="√" onclick="appendData(this)" class="num snum">√</button>
+
             <button value="4" onclick="appendData(this)" class="num">4</button>
             <button value="5" onclick="appendData(this)" class="num">5</button>
             <button value="6" onclick="appendData(this)" class="num">6</button>
             <button value="+" onclick="appendData(this)" class="num">+</button>
+            <button value="log(" onclick="appendData(this)" class="num snum">log</button>
+            <button value="!" onclick="appendData(this)" class="num snum">x!</button>
+
             <button value="1" onclick="appendData(this)" class="num">1</button>
             <button value="2" onclick="appendData(this)" class="num">2</button>
             <button value="3" onclick="appendData(this)" class="num">3</button>
-            <button value="-" onclick="appendData(this)" class="num">-</button>            
+            <button value="-" onclick="appendData(this)" class="num">-</button>
+            <button value="sin(" onclick="appendData(this)" class="num snum">sin</button>
+            <button value="cos(" onclick="appendData(this)" class="num snum">cos</button>
+
             <button value="." onclick="appendData(this)" class="num">.</button>
             <button value="0" onclick="appendData(this)" class="num">0</button>
             <button value="00" onclick="appendData(this)" class="num">00</button>
-            <button id="display" onclick="calculate()">=</button>         
+            <button id="display" onclick="calculate()">=</button>  
+            <button value="tan(" onclick="appendData(this)" class="num snum">tan</button>     
+            <button value="Rand" onclick="appendData(this)" class="num snum">Rand</button>     
         </div>
     </div>
 </body>
 <script>
-    function appendData(button){
+    function appendData(button) {
         let b = button.value;
         document.querySelector("#inputscreen").value += b;
     }    
-    function calculate(){
+
+    function calculate() {
         let a = document.getElementById('inputscreen');
-        if(a.value ===""){      
-           return; 
+        if (a.value === "") {      
+            return; 
         }
-        try{
+        try {
             let input = a.value;
-            input = input.replace(/%/g,'/100');
-            const res = eval(input);
+            input = input.replace(/%/g, '/100');
+            input = handleFactorials(input);
+            input = handleSquareRoot(input);
+            input = handleTrigonometricFunctions(input);
+            input = handleLogarithms(input); 
+            input = handleRandom(input);
+            const res = evaluateExpression(input);
             a.value = res;
-        }
-        catch(error){
-            a.value="Invalid";
+        } catch (error) {
+            a.value = "Invalid";
         } 
     }
-    function clearData(){
-        document.querySelector("#inputscreen").value = "";
-    } 
-    function deleteLast() {
-        let a = document.getElementById('inputscreen');
-        a.value = a.value.slice(0, -1);
+
+    function handleSquareRoot(input) {
+        return input.replace(/√\(?([^\)]*)\)?/g, (match, p1) => Math.sqrt(eval(p1)));
     }
-    function dark(){
+
+    
+    function handleTrigonometricFunctions(input) {
+        input = input.replace(/sin\((.*?)\)/g, (match, p1) => {
+            let degrees = eval(p1);
+            return fixFloatingPoint(Math.sin(degreesToRadians(degrees)));
+        });
+        input = input.replace(/cos\((.*?)\)/g, (match, p1) => {
+            let degrees = eval(p1);
+            return fixFloatingPoint(Math.cos(degreesToRadians(degrees)));
+        });
+        input = input.replace(/tan\((.*?)\)/g, (match, p1) => {
+            let degrees = eval(p1);
+            return fixFloatingPoint(Math.tan(degreesToRadians(degrees)));
+        });
+        return input;
+    }
+
+    function degreesToRadians(degrees) {
+        return degrees * (Math.PI / 180);
+    }
+
+    
+    function fixFloatingPoint(value) {
+        if (Math.abs(value) < 1e-10) return 0;  
+        return Math.round(value * 1e10) / 1e10; 
+    }
+
+    
+    function handleLogarithms(input) {
+        return input.replace(/log\((.*?)\)/g, (match, p1) => Math.log10(eval(p1)));
+    }
+
+    function handleRandom(input) {
+        return input.replace(/Rand/g, () => Math.random());
+    }
+
+    function handleFactorials(input) {
+        const factorialPattern = /(\d+)!/g;
+        let match;
+        while ((match = factorialPattern.exec(input)) !== null) {
+            const num = parseInt(match[1]);
+            const fact = factorial(num);
+            input = input.replace(match[0], fact);
+        }
+        return input;
+    }
+
+    function factorial(n) {
+        if (n < 0) return NaN; 
+        if (n === 0 || n === 1) return 1;
+        let result = 1;
+        for (let i = 2; i <= n; i++) {
+            result *= i;
+        }
+        return result;
+    }
+
+    function evaluateExpression(expr) {
+        let tokens = expr.match(/([0-9]*\.?[0-9]+|[+\-*/^()])/g);
+        let output = [];
+        let operators = [];
+        const precedence = {
+            '+': 1,
+            '-': 1,
+            '*': 2,
+            '/': 2,
+            '^': 3
+        };
+
+        for (let token of tokens) {
+            if (!isNaN(token)) { 
+                output.push(parseFloat(token));
+            } else if (token in precedence) { 
+                while (operators.length && precedence[operators[operators.length - 1]] >= precedence[token]) {
+                    output.push(operators.pop());
+                }
+                operators.push(token);
+            } else if (token === '(') {
+                operators.push(token);
+            } else if (token === ')') {
+                while (operators.length && operators[operators.length - 1] !== '(') {
+                    output.push(operators.pop());
+                }
+                operators.pop(); 
+            }
+        }
+
+        while (operators.length) {
+            output.push(operators.pop());
+        }
+
+        return evaluateRPN(output);
+    }
+
+    function evaluateRPN(tokens) {
+        let stack = [];
+        for (let token of tokens) {
+            if (typeof token === 'number') {
+                stack.push(token);
+            } else {
+                let b = stack.pop();
+                let a = stack.pop();
+                switch (token) {
+                    case '+': stack.push(a + b); break;
+                    case '-': stack.push(a - b); break;
+                    case '*': stack.push(a * b); break;
+                    case '/': stack.push(a / b); break;
+                    case '^': stack.push(Math.pow(a, b)); break;
+                }
+            }
+        }
+        return stack.pop();
+    }
+
+    function clearData() {
+        document.getElementById("inputscreen").value = "";
+    }
+
+    function deleteLast() {
+        let a = document.getElementById("inputscreen").value;
+        document.getElementById("inputscreen").value = a.slice(0, a.length - 1);
+    }
+
+    function dark() {
         let a = document.querySelector(".container");
         a.classList.toggle('active');
+    }
+    function scientific() {
+        let container = document.querySelector(".container");
+        container.classList.toggle('scientific-mode');
 
+        let input = document.querySelector('.input-section');
+        input.classList.toggle('scientific-mode-input');
+
+        let name = document.querySelector('.name');
+        name.classList.toggle('scientific-mode-name');
+
+        let c = document.querySelectorAll('.snum');
+        c.forEach(el => {
+            el.style.display = el.style.display === "inline" ? "none" : "inline";
+        });
     }
 </script>
 </html>

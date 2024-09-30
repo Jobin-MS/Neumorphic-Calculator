@@ -1,3 +1,4 @@
+@import "../node_modules/bootstrap/scss/functions";
 * {
     margin: 0;
     padding: 0;
@@ -25,6 +26,7 @@ body {
     color: black;
 }
 .container {
+    position: relative;
     width: 280px; 
     height: 450px;
     padding: 20px;
@@ -37,13 +39,13 @@ body {
     background-color: #ecf0f3;
     box-shadow: 3px 5px 10px rgba(0, 0, 0, 0.504); 
 }
+
 /* Display section styling */
 .display-section {
     height: 70px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 24px;
 }
 
 #inputscreen {
@@ -70,6 +72,7 @@ body {
 
 /* Input section styling */
 .input-section {
+    position: relative;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 10px;
@@ -129,4 +132,69 @@ body {
     background-color: #ff1a1a;
     box-shadow: inset 5px 5px 12px rgba(0, 0, 0, 0.4),
                 inset -5px -5px 12px rgba(255, 255, 255, 0.1);
+}
+
+
+/* scientific calculator styling */
+.form-check {
+    position: relative;
+    margin-bottom: 5px;
+}
+
+.form-check input {
+    position: absolute;
+    right: 10px;
+}
+
+.form-check-input.custom-switch {
+    background-color: grey; 
+}
+
+.form-check-input.custom-switch::before {
+    background-color: white; 
+    border-radius: 50%; 
+    content: ""; 
+    width: 12px; 
+    height: 12px; 
+    position: absolute;
+    top: 50%; 
+    left: 3px;
+    transform: translateY(-50%); 
+    transition: left 0.3s ease; 
+}
+
+.form-check-input.custom-switch:checked::before {
+    left: calc(100% - 15px); 
+}
+
+.form-check-input.custom-switch:checked {
+    background-color: grey; 
+}
+
+.form-check-input.custom-switch:checked:focus {
+    background-color: grey; 
+}
+.form-check-input {
+    box-shadow: none;
+    border: none;
+    outline: none;
+}
+
+.form-check-input:focus {
+    outline: none; 
+    box-shadow: none; 
+}
+
+.snum{
+    display:none;
+}
+.scientific-mode{
+    width:400px;
+}
+.scientific-mode-input{
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+}
+.scientific-mode-name{
+    margin-left: 300px;
 }
